@@ -8,7 +8,7 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    """Модель ингридиента"""
+    """Модель для описания ингредиентов."""
     name = models.CharField('Название', max_length=200)
     measurement_unit = models.CharField('Единица измерения', max_length=200)
 
@@ -22,7 +22,7 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    """Модель тега"""
+    """Модель для группировки рецептов по тэгам."""
     name = models.CharField('Название', unique=True, max_length=50)
     color = models.CharField(
         'Цветовой HEX-код',
@@ -46,7 +46,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель рецепта"""
+    """Основная модель приложения, через которую описываются рецепты."""
     name = models.CharField('Название', max_length=200)
     author = models.ForeignKey(
         User,
