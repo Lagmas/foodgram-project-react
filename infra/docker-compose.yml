@@ -1,52 +1,49 @@
----
-version: '3.3'
-services:
+version: '2.6'
 
-  frontend:
-    #image: lagmas/foodgram_front:latest
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ../frontend/:/app/result_build/
+services:
 
   db:
     image: postgres:13.0-alpine
-    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
+    restart: always
 
   backend:
-    #image: lagmas/foodgram_back:latest
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: lagmas/foodgram-backend:latest
     restart: always
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
+      - redoc:/app/api/docs/
     depends_on:
       - db
     env_file:
       - ./.env
 
+  frontend:
+    image: lagmas/foodgram-frontend:latest
+    volumes:
+      - ../frontend/:/app/result_build/
+
   nginx:
-    image: nginx:1.19.3
-    restart: always
+    image: nginx:1.21.3-alpine
     ports:
-      - 80:80
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./frontend/build:/usr/share/nginx/html/
+      - ../frontend/build:/usr/share/nginx/html/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
+      - redoc:/usr/share/nginx/html/api/docs/
     depends_on:
       - backend
+    restart: always
 
 volumes:
   static_value:
   media_value:
   postgres_data:
-...
+  redoc:
