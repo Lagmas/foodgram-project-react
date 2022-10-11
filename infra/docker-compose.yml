@@ -2,13 +2,13 @@
 version: '3.3'
 services:
 
-  #frontend:
+  frontend:
     #image: lagmas/foodgram_front:latest
-    #build:
-     # context: ../frontend
-      #dockerfile: Dockerfile
-   # volumes:
-     # - ../frontend/:/app/result_build/
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ../frontend/:/app/result_build/
 
   db:
     image: postgres:13.0-alpine
@@ -18,19 +18,19 @@ services:
     env_file:
       - ./.env
 
-  #backend:
+  backend:
     #image: lagmas/foodgram_back:latest
-    #build:
-     # context: ../backend
-     # dockerfile: Dockerfile
-   # restart: always
-   # volumes:
-    #  - static_value:/app/static/
-    #  - media_value:/app/media/
-    #depends_on:
-    #  - db
-    #env_file:
-    #  - ./.env
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - static_value:/app/static/
+      - media_value:/app/media/
+    depends_on:
+      - db
+    env_file:
+      - ./.env
 
   nginx:
     image: nginx:1.19.3
@@ -42,8 +42,8 @@ services:
       - ./frontend/build:/usr/share/nginx/html/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-    #depends_on:
-     # - backend
+    depends_on:
+      - backend
 
 volumes:
   static_value:
