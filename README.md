@@ -43,6 +43,7 @@ POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
 SECRET_KEY=<Your_some_long_string>
+DEBUG=False or Tru
 ```
 
 Создать и запустить контейнеры Docker, выполнить команду на сервере

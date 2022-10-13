@@ -55,7 +55,10 @@ class Recipe(models.Model):
         null=True,
         verbose_name='Автор',
     )
-    text = models.TextField('Описание')
+    text = models.TextField(
+        'Описание',
+        max_length=2000,
+    )
     image = models.ImageField(
         'Изображение',
         upload_to='recipes/'
@@ -144,7 +147,8 @@ class Favourite(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user} добавил "{self.recipe}" в Избранное'
+        #return f'{self.user} добавил "{self.recipe}" в Избранное'
+        return f'{self.user} {self.recipe}'
 
 
 class ShoppingCart(models.Model):
@@ -171,4 +175,5 @@ class ShoppingCart(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
+        #return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
+        return f'{self.user} {self.recipe}'
