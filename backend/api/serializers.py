@@ -137,16 +137,22 @@ class RecipeReadSerializer(ModelSerializer):
     def get_is_favorited(self, obj):
         """Проверка - находится ли рецепт в избранном."""
         user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return user.favorites.filter(recipe=obj).exists()
+        return (user.is_authenticated
+                and Recipe.objects.filter(
+                    favorites__user=user,
+                    id=obj.id
+                    ).exists()
+                )
 
     def get_is_in_shopping_cart(self, obj):
         """Проверка - находится ли рецепт в списке  покупок."""
         user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return user.shopping_cart.filter(recipe=obj).exists()
+        return (user.is_authenticated
+                and Recipe.objects.filter(
+                    shopping_cart__user=user,
+                    id=obj.id,
+                    ).exists()
+                )
 
 
 class IngredientInRecipeWriteSerializer(ModelSerializer):
@@ -192,6 +198,12 @@ class RecipeWriteSerializer(ModelSerializer):
                 raise ValidationError({
                     'ingredients': 'Ингридиенты не могут повторяться!'
                 })
+            try:
+                int(item['amount'])
+            except Exception:
+                raise ValidationError(
+                    {'amount': 'Количество должно быть числом!'}
+                )
             if int(item['amount']) <= 0:
                 raise ValidationError({
                     'amount': 'Количество ингредиента должно быть больше 0!'
@@ -207,6 +219,11 @@ class RecipeWriteSerializer(ModelSerializer):
                 'tags': 'Нужно выбрать хотя бы один тег!'
             })
         tags_set = set(tags)
+        for tag in tags:
+            if not Tag.objects.filter(id=tag.id).exists():
+                raise ValidationError({
+                    'tags': 'Должны использоваться существующие теги'
+                })
         if len(tags) != len(tags_set):
             raise ValidationError({
                 'tags': 'Теги должны быть уникальными!'

@@ -52,7 +52,6 @@ class Recipe(models.Model):
         User,
         related_name='recipes',
         on_delete=models.CASCADE,
-        null=True,
         verbose_name='Автор',
     )
     text = models.TextField(
@@ -147,8 +146,7 @@ class Favourite(models.Model):
         ]
 
     def __str__(self):
-        #return f'{self.user} добавил "{self.recipe}" в Избранное'
-        return f'{self.user} {self.recipe}'
+        return f'{self.user} добавил "{self.recipe}" в Избранное'
 
 
 class ShoppingCart(models.Model):
@@ -175,5 +173,4 @@ class ShoppingCart(models.Model):
         ]
 
     def __str__(self):
-        #return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
-        return f'{self.user} {self.recipe}'
+        return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
