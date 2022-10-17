@@ -11,10 +11,10 @@ services:
     restart: always
 
   backend:
-    #image: lagmas/foodgram-backend:latest
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: lagmas/foodgram-backend:latest
+    # build:
+    #   context: ../backend
+    #   dockerfile: Dockerfile
     restart: always
     volumes:
       - static_value:/app/static/
@@ -26,10 +26,10 @@ services:
       - ./.env
 
   frontend:
-    #image: lagmas/foodgram-frontend:latest
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: lagmas/foodgram-frontend:latest
+    # build:
+    #   context: ../frontend
+    #   dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
 
